@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 
 app.get('/', (req, res) => {
-  res.json({ message: 'Hello from Jenkins + Docker + Kubernetes!' });
+  res.json({ message: 'Hello from Jenkins + Docker' });
 });
 
 app.get('/health', (req, res) => {
