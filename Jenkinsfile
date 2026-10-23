@@ -54,21 +54,6 @@ pipeline {
                 }
             }
         }
-
-        stage('Deploy to Kubernetes') {
-            when { branch 'main' }
-            steps {
-                withCredentials([file(credentialsId: env.KUBECONFIG_CREDS, variable: 'KUBECONFIG')]) {
-                    sh '''
-                        sed -i "s|image: .*|image: ${IMAGE_NAME}:${IMAGE_TAG}|" k8s/deployment.yaml
-                        kubectl apply -f k8s/deployment.yaml
-                        kubectl apply -f k8s/service.yaml
-                        kubectl apply -f k8s/hpa.yaml
-                        kubectl rollout status deployment/demo-app --timeout=120s
-                    '''
-                }
-            }
-        }
     }
 
     post {
