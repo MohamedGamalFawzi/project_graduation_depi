@@ -3,12 +3,12 @@ pipeline {
 
     environment {
         // غيّر القيم دي حسب حسابك
-        DOCKERHUB_USER = 'YOUR_DOCKERHUB_USER'
+        DOCKERHUB_USER = 'mogamalfawzy'
         IMAGE_NAME     = "${DOCKERHUB_USER}/demo-app"
         IMAGE_TAG      = "${env.BUILD_NUMBER}"
         // Credentials IDs لازم تتعمل في Jenkins (Manage Jenkins > Credentials)
         DOCKERHUB_CREDS = 'dockerhub-creds'   // Username with password
-        KUBECONFIG_CREDS = 'kubeconfig'       // Secret file
+        //KUBECONFIG_CREDS = 'kubeconfig'       // Secret file
     }
 
     options {
