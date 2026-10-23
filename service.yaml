@@ -5,7 +5,7 @@ metadata:
   labels:
     app: demo-app
 spec:
-  type: NodePort   # غيّرها لـ LoadBalancer لو على كلاود، أو ClusterIP مع Ingress
+  type: NodePort   
   selector:
     app: demo-app
   ports:
