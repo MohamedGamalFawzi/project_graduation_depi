@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        // غيّر القيم دي حسب حسابك
         DOCKERHUB_USER = 'mogamalfawzy'
         IMAGE_NAME     = "${DOCKERHUB_USER}/demo-app"
         IMAGE_TAG      = "v1.${env.BUILD_NUMBER}"
