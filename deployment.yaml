@@ -5,7 +5,6 @@ metadata:
   labels:
     app: demo-app
 spec:
-  replicas: 2
   selector:
     matchLabels:
       app: demo-app
@@ -21,14 +20,12 @@ spec:
     spec:
       containers:
         - name: demo-app
-          # بيتم استبدال الصورة دي من Jenkinsfile في كل بيلد
-          image: YOUR_DOCKERHUB_USER/demo-app:latest
+          image: mogamalfawzy/demo-app:latest
           ports:
             - containerPort: 3000
           env:
             - name: PORT
               value: "3000"
-          # الـ requests ضرورية عشان الـ HPA يشتغل
           resources:
             requests:
               cpu: 100m
