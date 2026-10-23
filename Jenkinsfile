@@ -5,8 +5,7 @@ pipeline {
         // غيّر القيم دي حسب حسابك
         DOCKERHUB_USER = 'mogamalfawzy'
         IMAGE_NAME     = "${DOCKERHUB_USER}/demo-app"
-        IMAGE_TAG      = "${env.BUILD_NUMBER}"
-        // Credentials IDs لازم تتعمل في Jenkins (Manage Jenkins > Credentials)
+        IMAGE_TAG      = "v1.${env.BUILD_NUMBER}"
         DOCKERHUB_CREDS = 'dockerhub-creds'   // Username with password
         //KUBECONFIG_CREDS = 'kubeconfig'       // Secret file
     }
@@ -29,7 +28,7 @@ pipeline {
                 docker { image 'node:20-alpine'; reuseNode true }
             }
             steps {
-                sh 'npm ci'
+                sh 'npm install'
                 sh 'npm test'
             }
         }
