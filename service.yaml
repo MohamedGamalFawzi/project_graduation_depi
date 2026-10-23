@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-app-service
+  labels:
+    app: demo-app
+spec:
+  type: NodePort   # غيّرها لـ LoadBalancer لو على كلاود، أو ClusterIP مع Ingress
+  selector:
+    app: demo-app
+  ports:
+    - port: 80
+      targetPort: 3000
+      nodePort: 30080
