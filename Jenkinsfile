@@ -6,7 +6,6 @@ pipeline {
         IMAGE_NAME     = "${DOCKERHUB_USER}/demo-app"
         IMAGE_TAG      = "v1.${env.BUILD_NUMBER}"
         DOCKERHUB_CREDS = 'dockerhub-creds'   // Username with password
-        //KUBECONFIG_CREDS = 'kubeconfig'       // Secret file
     }
 
     options {
@@ -41,8 +40,8 @@ pipeline {
         stage('Push Image') {
             steps {
                 withCredentials([usernamePassword(credentialsId: env.DOCKERHUB_CREDS,
-                                                  usernameVariable: 'DH_USER',
-                                                  passwordVariable: 'DH_PASS')]) {
+                                                usernameVariable: 'DH_USER',
+                                                passwordVariable: 'DH_PASS')]) {
                     sh '''
                         echo "$DH_PASS" | docker login -u "$DH_USER" --password-stdin
                         docker push ${IMAGE_NAME}:${IMAGE_TAG}
@@ -52,9 +51,8 @@ pipeline {
                 }
             }
         }
-    }
-    
-    stage('Deploy to Kubernetes') {
+
+        stage('Deploy to Kubernetes') {
             steps {
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
                     sh '''
@@ -73,6 +71,8 @@ pipeline {
                 }
             }
         }
+    }
+    
     post {
         success { echo "Deployed ${IMAGE_NAME}:${IMAGE_TAG} successfully" }
         failure { echo 'Pipeline failed' }
