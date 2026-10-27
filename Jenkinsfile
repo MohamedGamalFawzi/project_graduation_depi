@@ -51,10 +51,5 @@ pipeline {
                 }
             }
         }
-    
-    post {
-        success { echo "Deployed ${IMAGE_NAME}:${IMAGE_TAG} successfully" }
-        failure { echo 'Pipeline failed' }
-        always  { sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG} || true" }
     }
 }
