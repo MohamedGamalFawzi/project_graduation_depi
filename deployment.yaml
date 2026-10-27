@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: demo-app
-          image: mogamalfawzy/demo-app:latest
+          image: mogamalfawzy/demo-app:${BUILD_TAG}
           ports:
             - containerPort: 3000
           env:
