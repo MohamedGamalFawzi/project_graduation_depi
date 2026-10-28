@@ -51,5 +51,24 @@ pipeline {
                 }
             }
         }
+        stage('Deploy to Kubernetes') {
+            steps {
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh """
+                        echo "Updating deployment.yaml with image tag: ${IMAGE_TAG}"
+                        sed -i "s|image: ${IMAGE_NAME}:.*|image: ${IMAGE_NAME}:${IMAGE_TAG}|g" deployment.yaml
+                        
+                        echo "Applying Kubernetes manifests to k3d cluster..."
+                        kubectl apply -f deployment.yaml
+                        kubectl apply -f service.yaml
+                        kubectl apply -f hpa.yaml
+                        
+                        echo "Verifying cluster status and pod distribution..."
+                        kubectl get pods -o wide
+                        kubectl get svc
+                    """
+                }
+            }
+        }
     }
 }
