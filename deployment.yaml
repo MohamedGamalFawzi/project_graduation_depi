@@ -5,7 +5,7 @@ metadata:
   labels:
     app: demo-app
 spec:
-  replicas: 4  # خليناها 4 زي ما طلبت عشان تتوزع بالتساوي
+  replicas: 4  # الـ 4 replicas هيتقسموا بالتساوي الإجباري
   selector:
     matchLabels:
       app: demo-app
@@ -29,19 +29,15 @@ spec:
                 operator: DoesNotExist
               - key: node-role.kubernetes.io/master
                 operator: DoesNotExist
-        
-        # 2. ضمان التوزيع المتساوي للـ Replicas بين الـ Workers (مثلاً 2 و 2)
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app
-                  operator: In
-                  values:
-                  - demo-app
-              topologyKey: "kubernetes.io/hostname"
+
+      # 2. التوزيع المتساوي الإجباري (Strict Spread) على الـ Worker Nodes
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: "kubernetes.io/hostname"
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app: demo-app
 
       containers:
         - name: demo-app
