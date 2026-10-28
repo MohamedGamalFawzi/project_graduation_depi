@@ -59,9 +59,9 @@ pipeline {
                         sed -i "s|image: ${IMAGE_NAME}:.*|image: ${IMAGE_NAME}:${IMAGE_TAG}|g" deployment.yaml
                         
                         echo "Applying Kubernetes manifests to k3d cluster..."
-                        kubectl apply -f deployment.yaml
-                        kubectl apply -f service.yaml
-                        kubectl apply -f hpa.yaml
+                        kubectl apply -f deployment.yaml --validate=false
+                        kubectl apply -f service.yaml --validate=false
+                        kubectl apply -f hpa.yaml --validate=false
                         
                         echo "Verifying cluster status and pod distribution..."
                         kubectl get pods -o wide
