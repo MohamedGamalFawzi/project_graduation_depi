@@ -5,6 +5,7 @@ metadata:
   labels:
     app: demo-app
 spec:
+  replicas: 4  # خليناها 4 زي ما طلبت عشان تتوزع بالتساوي
   selector:
     matchLabels:
       app: demo-app
@@ -18,6 +19,30 @@ spec:
       labels:
         app: demo-app
     spec:
+      # 1. منع الـ Pods من النزول على الماستر وإجبارها على الـ Workers فقط
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: DoesNotExist
+              - key: node-role.kubernetes.io/master
+                operator: DoesNotExist
+        
+        # 2. ضمان التوزيع المتساوي للـ Replicas بين الـ Workers (مثلاً 2 و 2)
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - demo-app
+              topologyKey: "kubernetes.io/hostname"
+
       containers:
         - name: demo-app
           image: mogamalfawzy/demo-app:${BUILD_TAG}
